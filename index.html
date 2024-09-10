@@ -20,7 +20,7 @@
           <input
             type="text"
             class="mt-1 block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            placeholder="Nom du contact"
+            placeholder="Nom du contact" v-model="inputContact.name"
           />
         </div>
         <div class="mb-4">
@@ -28,7 +28,7 @@
           <input
             type="text"
             class="mt-1 block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            placeholder="Numéro de téléphone"
+            placeholder="Numéro de téléphone" v-model="inputContact.phone"
           />
         </div>
         <div class="mb-4">
@@ -36,11 +36,11 @@
           <input
             type="email"
             class="mt-1 block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            placeholder="Adresse email"
+            placeholder="Adresse email" v-model="inputContact.email"
           />
         </div>
         <button
-          class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md"
+          class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md" @click.prevent="addOne()"
         >
           Ajouter/Modifier le contact
         </button>
@@ -63,7 +63,7 @@
         <!-- Liste des contacts triée et filtrée -->
         <ul class="space-y-4">
           <li
-            class="flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow-sm" v-for="contact in contacts":key="contact"
+            class="flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow-sm" v-for="contact in contacts":key="contact.id"
           >
             <div>
               <p class="text-lg font-semibold">{{contact.name}}</p>
@@ -98,8 +98,28 @@
             data(){
                 return{
                     contacts: JSON.parse(localStorage.getItem('contacts')) || [],
+                    inputContact: {id: null, name: "", phone: "", email: ""},
                 };
-            }
+            },
+            methods:{
+                addOne(){
+                    this.inputContact.id = Date.now();
+                    this.contacts.push({ ... this.inputContact});
+                    this.inputContact.id = null;
+                    this.inputContact.name = "";
+                    this.inputContact.phone = "";
+                    this.inputContact.email = "";
+                },
+            },
+            watch: {
+                contacts:{
+                handler(newValue, oldValue){
+                //mettre a jour le localstorage
+                localStorage.setItem('contacts', JSON.stringify(this.contacts));
+        },
+        deep: true
+      }
+    }
         }).mount('#app');
     </script>
   </body>
