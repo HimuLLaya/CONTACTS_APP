@@ -9,7 +9,6 @@
       href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
       rel="stylesheet"
     />
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   </head>
   <body class="bg-gray-100 p-8">
     <div id="app" class="max-w-5xl mx-auto bg-white rounded-lg shadow-lg flex">
@@ -64,12 +63,12 @@
         <!-- Liste des contacts triée et filtrée -->
         <ul class="space-y-4">
           <li
-            class="flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow-sm"
+            class="flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow-sm" v-for="contact in contacts":key="contact"
           >
             <div>
-              <p class="text-lg font-semibold">Name</p>
-              <p class="text-gray-600">phone</p>
-              <p class="text-gray-600">email</p>
+              <p class="text-lg font-semibold">{{contact.name}}</p>
+              <p class="text-gray-600">{{contact.phone}}</p>
+              <p class="text-gray-600">{{contact.email}}</p>
             </div>
             <div class="flex space-x-2">
               <button
@@ -91,11 +90,15 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
     <script>
-        vue.createapp({
+        localStorage.contacts = JSON.stringify([
+            {id: Date.now(), name: "Laurent fery", phone: "12345678", email: "Fery_laurent@hotmail.com"},
+        ])
+
+        Vue.createApp({
             data(){
                 return{
-
-                }
+                    contacts: JSON.parse(localStorage.getItem('contacts')) || [],
+                };
             }
         }).mount('#app');
     </script>
